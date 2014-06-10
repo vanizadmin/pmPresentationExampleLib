@@ -8,6 +8,8 @@ package pm.presentation.example.lib;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import javax.swing.ListModel;
+import javax.swing.UIManager;
 import javax.swing.tree.TreeSelectionModel;
 //import javax.swing.ListModel;
 /**
@@ -22,9 +24,11 @@ public class FilesMainPanel extends javax.swing.JPanel {
     FilesTreeNode rootNode;
     private final FilesListCellRenderer listCellRenderer = new FilesListCellRenderer();
     public FilesMainPanel() {
-        rootNode = new FilesTreeNode(null); 
+                        rootNode = new FilesTreeNode(null); 
         rootNode.loadChildren(); 
+
         initComponents();
+
     }
 
     /**
@@ -36,42 +40,30 @@ public class FilesMainPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        fsTree = new pm.presentation.example.lib.FilesTree(rootNode);
-        fsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         jScrollPane2 = new javax.swing.JScrollPane();
         fsList = new pm.presentation.example.lib.FilesList(null);
         fsList.setCellRenderer(listCellRenderer);
+        jScrollPane1 = new javax.swing.JScrollPane();
+        fsTree = new pm.presentation.example.lib.FilesTree(rootNode);
+        fsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-        fsTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
-                fsTreeValueChanged(evt);
-            }
-        });
-        jScrollPane1.setViewportView(fsTree);
-
-        fsList.setModel(javax.swing.ListModel);
         jScrollPane2.setViewportView(fsList);
+
+        jScrollPane1.setViewportView(fsTree);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(13, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
     }// </editor-fold>//GEN-END:initComponents
 

@@ -36,7 +36,7 @@ public class ShowPropertiesAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        createPropertiesDialog(filesMainPanel.getSelectedPath());
+   //     createPropertiesDialog(filesMainPanel.getSelectedPath());
     }
 
     private void createPropertiesDialog(Path entity) {
