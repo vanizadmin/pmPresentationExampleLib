@@ -27,6 +27,11 @@ public class FilesList extends JList {
     public FilesList() {
         initComponents();
     }
+    public FilesList(Path dir) {
+        loadDirContents(dir);
+        setModel(listModel);
+        initComponents();
+    }
     public final void loadDirContents(Path dir) //final ⇔ not overridable
     {
         listModel.removeAllElements();
@@ -52,11 +57,7 @@ public class FilesList extends JList {
             }
         }
     }
-    public FilesList(Path dir) {
-        loadDirContents(dir);
-        setModel(listModel);
-        initComponents();
-    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

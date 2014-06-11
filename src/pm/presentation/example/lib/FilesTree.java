@@ -15,7 +15,7 @@ import javax.swing.JTree;
  * @author user
  */
 public class FilesTree extends JTree {
-
+    private Path selectedPath;
     /**
      * Creates new form FilesTree
      */
@@ -25,6 +25,13 @@ public class FilesTree extends JTree {
     public FilesTree(FilesTreeNode rootNode) {
         super(rootNode);
         initComponents();
+    }
+    public void setSelectedPath(Path sp) {
+        selectedPath = sp;
+    }
+
+    public Path getSelectedPath() {
+        return selectedPath;
     }
     /**
      * This method is called from within the constructor to initialize the form.

@@ -6,10 +6,19 @@
 
 package pm.presentation.example.lib;
 
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import javax.swing.ListModel;
-import javax.swing.UIManager;
+import javax.swing.GroupLayout;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.LayoutStyle;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeSelectionModel;
 //import javax.swing.ListModel;
 /**
@@ -17,18 +26,20 @@ import javax.swing.tree.TreeSelectionModel;
  * @author user
  */
 public class FilesMainPanel extends javax.swing.JPanel {
-
+    private Path selectedPath;
+    private Object selectedComponent;
     /**
      * Creates new form FilesMainPanel
      */
     FilesTreeNode rootNode;
     private final FilesListCellRenderer listCellRenderer = new FilesListCellRenderer();
     public FilesMainPanel() {
-                        rootNode = new FilesTreeNode(null); 
-        rootNode.loadChildren(); 
-
+        rootNode = new FilesTreeNode(null);
+        rootNode.loadChildren();
         initComponents();
-
+        MouseListener popupListener = new PopupListener(fsPopupMenu); // νέες γραμμ ές
+        fsTree.addMouseListener(popupListener);
+        fsList.addMouseListener(popupListener);
     }
 
     /**
@@ -40,45 +51,100 @@ public class FilesMainPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane2 = new javax.swing.JScrollPane();
-        fsList = new pm.presentation.example.lib.FilesList(null);
+        fsPopupMenu = fsPopupMenu = new FilesPopupMenu(this);
+        jScrollPane2 = new JScrollPane();
+        fsList = new FilesList(null);
         fsList.setCellRenderer(listCellRenderer);
-        jScrollPane1 = new javax.swing.JScrollPane();
-        fsTree = new pm.presentation.example.lib.FilesTree(rootNode);
+        jScrollPane1 = new JScrollPane();
+        fsTree = new FilesTree(rootNode);
         fsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
+        fsList.addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent evt) {
+                fsListFocusGained(evt);
+            }
+        });
         jScrollPane2.setViewportView(fsList);
 
+        fsTree.addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent evt) {
+                fsTreeFocusGained(evt);
+            }
+        });
+        fsTree.addTreeSelectionListener(new TreeSelectionListener() {
+            public void valueChanged(TreeSelectionEvent evt) {
+                fsTreeValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(fsTree);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 164, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
             .addComponent(jScrollPane2)
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void fsTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_fsTreeValueChanged
+    private void fsTreeValueChanged(TreeSelectionEvent evt) {//GEN-FIRST:event_fsTreeValueChanged
         FilesTreeNode node = (FilesTreeNode) evt.getPath().getLastPathComponent();
+        selectedPath = (Path) node.getUserObject(); // νέες γραμμ ές
+        fsTree.setSelectedPath(selectedPath);
         if (node.getUserObject() == null || Files.isDirectory((Path) node.getUserObject())) {
             fsList.loadDirContents((Path) node.getUserObject());
         }
     }//GEN-LAST:event_fsTreeValueChanged
 
+    private void fsTreeFocusGained(FocusEvent evt) {//GEN-FIRST:event_fsTreeFocusGained
+        selectedComponent = fsTree;
+        selectedPath = fsTree.getSelectedPath();
+    }//GEN-LAST:event_fsTreeFocusGained
 
+    private void fsListFocusGained(FocusEvent evt) {//GEN-FIRST:event_fsListFocusGained
+        selectedComponent = fsList;
+    }//GEN-LAST:event_fsListFocusGained
+
+    class PopupListener extends MouseAdapter {
+
+        JPopupMenu popup;
+
+        PopupListener(JPopupMenu popupMenu) {
+            popup = popupMenu;
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            maybeShowPopup(e);
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            maybeShowPopup(e);
+        }
+
+        private void maybeShowPopup(MouseEvent e) {
+            if (e.isPopupTrigger()) {
+                popup.show(e.getComponent(),
+                        e.getX(), e.getY());
+            }
+        }
+    }
+    public Path getSelectedPath() {
+        return selectedPath;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private pm.presentation.example.lib.FilesList fsList;
-    private pm.presentation.example.lib.FilesTree fsTree;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private FilesList fsList;
+    private FilesPopupMenu fsPopupMenu;
+    private FilesTree fsTree;
+    private JScrollPane jScrollPane1;
+    private JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }
